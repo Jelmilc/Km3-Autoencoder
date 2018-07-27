@@ -14,19 +14,21 @@ def parse_input():
     parser.add_argument('autoencoder_model', type=str, help='name of _test.txt files to plot.')
     parser.add_argument('parallel_model', type=str, help='name of _test.txt files to plot.')
     parser.add_argument('parallel_model_2', type=str, help='name of _test.txt files to plot.')
+
     args = parser.parse_args()
     params = vars(args)
     return params
 
 params = parse_input()
-test_files = [ params["autoencoder_model"], params["parallel_model"], params["parallel_model_2"] ]
+test_files = [ params["autoencoder_model"], params["parallel_model"], params["parallel_model_2"]]
 
 
 xlabel="Epoch"
-title="Parallel Training with additional convolution"
+title=""
+#title="Parallel Training with additional convolution"
 figsize = (13,8)
-#Override default labels (names of the models); must be one for every test file, otherwise default
-labels_override=["Autoencoder", "Two dense layers", "Convolution and two dense layers"]
+#Override default labels (names of the models); must be one for every test file, otherwise default:Two dense layers,Convolution and two dense layers
+labels_override=["Autoencoder", "encoder training(Dropout=0.2 in dense)", "encoder training(Dropout=0.1 in dense)"]
 #legend location for the labels and the test/train box
 legend_locations=(1, "upper left")
 #Override xtick locations; None for automatic
@@ -47,13 +49,18 @@ data_autoencoder = data_from_files[0]
 data_parallel = data_from_files[1]
 data_parallel_2 = data_from_files[2]
 
-#Which epochs from the parallel encoder history to take:
-how_many_epochs_each_to_train = np.array([10,]*1+[2,]*5+[1,]*200)
 
-data_parallel_test, data_parallel_train = get_last_prl_epochs(data_autoencoder, data_parallel, how_many_epochs_each_to_train)
-data_parallel_test_2, data_parallel_train_2 = get_last_prl_epochs(data_autoencoder, data_parallel_2, how_many_epochs_each_to_train)
+#Which epochs from the parallel encoder history to take:
+how_many_epochs_each_to_train = np.array([10, ]*1+[2, ]*5+[1, ]*200)
+
+data_parallel_test, data_parallel_train = get_last_prl_epochs(data_autoencoder, data_parallel,
+                                            how_many_epochs_each_to_train)
+data_parallel_test_2, data_parallel_train_2 = get_last_prl_epochs(data_autoencoder, data_parallel_2,
+                                            how_many_epochs_each_to_train)
+
 
 data_parallel_2 = [data_parallel_test_2[0], data_parallel_test_2[1], data_parallel_train_2[0], data_parallel_train_2[1]]
+
 
 fig = make_plot_same_y_parallel(data_autoencoder, data_parallel_train, data_parallel_test, default_label_array, xlabel, ylabel_list, 
                  title, legend_locations, labels_override, colors, xticks, figsize, data_parallel_2)

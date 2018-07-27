@@ -20,7 +20,7 @@ def make_options_dict(additional_options):
     
     #Default entries:
     options_dict={}
-    options_dict["dropout_for_dense"] = 0.2
+    options_dict["dropout_for_dense"] = 0.0
     options_dict["batchnorm_before_dense"]=True
     options_dict["unlock_BN_in_encoder"]=False
     options_dict["batchnorm_for_dense"]=False
@@ -209,6 +209,8 @@ def setup_model(model_tag, autoencoder_stage, modelpath_and_name=None, additiona
 
     elif model_tag == "vgg_5_2000":
         model = setup_vgg_5_2000(autoencoder_stage, options_dict, modelpath_and_name)
+    elif model_tag == "vgg_5_4000":
+        model = setup_vgg_5_4000(autoencoder_stage, options_dict, modelpath_and_name)
     
     elif model_tag == "vgg_5_picture":
         model = setup_vgg_5_picture(autoencoder_stage, options_dict, modelpath_and_name)
@@ -245,9 +247,9 @@ def setup_model(model_tag, autoencoder_stage, modelpath_and_name=None, additiona
         model = setup_vgg_5_64(autoencoder_stage, options_dict, modelpath_and_name) 
         
     elif model_tag == "vgg_5_32":
-        model = setup_vgg_5_32(autoencoder_stage, options_dict, modelpath_and_name)    
-     
-        
+        model = setup_vgg_5_32(autoencoder_stage, options_dict, modelpath_and_name)
+
+
     elif model_tag == "channel_vgg":
         options_dict["number_of_filters_in_input"]=31
         model = setup_channel_vgg(autoencoder_stage, options_dict, modelpath_and_name)

@@ -30,13 +30,20 @@ from scripts.util.saved_setups_for_plot_statistics import get_props_for_plot_par
 
 #Default Values:
 xlabel="Epoch"
-title=""
+
+#Different titles for plots
+title = ""
+#title = "supervised parallel training"
+#title="Loss of autoencoders with a varying number of convolutional layers"
+figsize = (13,8)
 #Override default labels (names of the models); must be one for every test file, otherwise default
-labels_override=["model",]
-#legend location for the labels and the test/train box
+labels_override=[ "Encodertraining vgg-5-2000-eps01 on manipulated data", "Fully supervised training on manipulated data", "Fully supervised training on correct data"]
+#legend location for the labels and the test/train box,
+>>>>>>> Stashed changes
 legend_locations=(1, "upper left")
 #Override xtick locations; None for automatic
 xticks=None
+
 # override line colors; must be one color for every test file, otherwise automatic
 colors=[] # = automatic
 #Name of file to save the numpy array with the plot data to; None will skip saving
@@ -72,36 +79,14 @@ def make_parser_plot(test_files, title, labels_override, save_as,
     if show_it: plt.show(fig)
 
 
-if test_files[0]=="saved":
-    #Load a saved setup, identified with a tag
-    tag=test_files[1]
-    if tag == "all":
-        #make and save all the plots whose setup is saved, without displaying them.
-        current_tag_number=0
-        while True:
-            try:
-                test_files, title, labels_override, save_as, legend_locations, colors, xticks, style, xrange, average_train_data_bins = get_props_for_plot_parser(current_tag_number)
-                make_parser_plot(test_files, title, labels_override, save_as, 
-                     legend_locations, colors, xticks, style,
-                     dump_to_file, xlabel, save_it=True, show_it=False,
-                     xrange=xrange, average_train_data_bins=average_train_data_bins)
-                current_tag_number+=1
-            except NameError:
-                print("Done. Generated a total of",current_tag_number,"plots.")
-                break
-    else:
-        #overwrite some of the above options from a specific saved setup
-        test_files, title, labels_override, save_as, legend_locations, colors, xticks, style, xrange, average_train_data_bins = get_props_for_plot_parser(tag)
+data_for_plots, ylabel_list, default_label_array = make_data_from_files(test_files, dump_to_file=dump_to_file)
+fig = make_plot_same_y(data_for_plots, default_label_array, xlabel, ylabel_list, title,
+                legend_locations, labels_override, colors, xticks, figsize=figsize)
 
-        make_parser_plot(test_files, title, labels_override, save_as, 
-                     legend_locations, colors, xticks, style,
-                     dump_to_file, xlabel, save_it, show_it=True, 
-                     xrange=xrange, average_train_data_bins=average_train_data_bins)
+if save_as != None:
+    plt.savefig(save_as)
+    print("Saved plot as",save_as)
 
-else:
-    #Load the models handed to the parser directly, without a tag
-    
-    make_parser_plot(test_files, title, labels_override, save_as, 
-                     legend_locations, colors, xticks, style,
-                     dump_to_file, xlabel, save_it, show_it=True, xrange=xrange,
-                     average_train_data_bins=average_train_data_bins)
+plt.show(fig)
+
+

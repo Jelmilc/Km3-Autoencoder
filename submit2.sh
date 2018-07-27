@@ -11,7 +11,7 @@
 # Tag for the model used; Identifies both autoencoder and encoder
 # This also defines the name of the folder where everything is saved
 # can append '-XXX' for model version, which is saved in its own folder
-modeltag="vgg_5_2000-eps01"
+modeltag="vgg_5_200"
 #How many additinal epochs the network will be trained for by executing this script:
 runs=100
 #Type of training/network
@@ -20,8 +20,8 @@ runs=100
 # 2: encoder+dense from scratch, completely unfrozen
 # 3: Parallel supervised training (load in new frozen encoder epoch according to schedule)
 # 4: Unfreeze training: Like stage 1, but conv blocks are unfrozen every few epochs.
-autoencoder_stage=0
-#Define starting epoch of autoencoder model 
+autoencoder_stage=2
+#Define starting epoch of autoencoder model
 #(stage 1: the frozen encoder part of which autoencoder epoch to use)
 # if -1, the latest epoch is automatically looked for
 # not used for stage 2 and 3
@@ -48,11 +48,11 @@ verbose=2
 dataset="xzt"
 #Initial Learning rate, usually 0.001
 # negative lr = take the absolute as the lr at epoch 1, and apply the decay epoch times
-learning_rate=-0.06
+learning_rate=-0.001
 #lr_decay can either be a float, e.g. 0.05 for 5% decay of lr per epoch,
 #or it can be a string like s1 for lr schedule 1.
 #available lr schedules are listed in run_autoencoder.py
-learning_rate_decay=0.05
+learning_rate_decay="s1"
 
 # exponent of epsilon for the adam optimizer (actual epsilon is 10^this)
 # Autoencoder: should be -1
@@ -64,9 +64,7 @@ lambda_comp=0
 optimizer="adam"
 # Additional options for the model, see model_definitions.py; "None" for no options
 # e.g. "dropout=0.3", "unlock_BN", ...
-# multiple options are seperated with -
-# if the option argument contains -, use quotation marks like: load_model="...-..."
-options="None"
+options="dropout=0.1"
 
 # allows to create multiple supervised trainings from the same AE model
 # the version is added to the filename as a string, so empty string is versionless

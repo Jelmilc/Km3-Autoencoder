@@ -35,13 +35,18 @@ else:
     
 #Default Values for plotting:
 xlabel="Epoch"
+<<<<<<< Updated upstream
 title="Parallel Training"
 
 #For putting 2 plots next to each other, this is alright and readable
 style="two_in_one_line"
 
+=======
+title=""
+figsize = (13,8)
+>>>>>>> Stashed changes
 #Override default labels (names of the models); must be one for every test file, otherwise default
-labels_override=[]
+labels_override=["autoencoder", "supervised encoder training with dropout=0.1"]
 #legend location for the labels and the test/train box
 legend_locations=(1, "upper left")
 #Override xtick locations; None for automatic
@@ -64,7 +69,7 @@ def make_parallel_statistics(test_files, title, labels_override, save_as, epoch_
         
     #Which epochs from the parallel encoder history to take:
     how_many_epochs_each_to_train = get_how_many_epochs_each_to_train(epoch_schedule)
-    
+
     #Returns ( [[Test_epoch, Test_ydata, Train_epoch, Train_ydata], ...], ylabel_list, default_label_array) 
     #for every test file
     data_from_files, ylabel_list, default_label_array = make_data_from_files(test_files, dump_to_file=dump_to_file)
